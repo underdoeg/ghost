@@ -110,6 +110,9 @@ public:
 		GHOST_TSuccess
 	setWindowBorder(bool hasBorder);
 
+		GHOST_TSuccess
+	setWindowOnTop(bool onTop);
+
 		void 
 	getClientBounds(
 		GHOST_Rect& bounds

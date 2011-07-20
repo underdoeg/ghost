@@ -124,6 +124,12 @@ public:
 	 */
 	virtual	GHOST_TSuccess setWindowBorder(bool hasBorder) = 0;
 
+		/**
+	 * sets window to top
+	 * @param alwaysOnTop true to have the window always on top
+	 */
+	virtual	GHOST_TSuccess setWindowOnTop(bool alwaysOnTop) = 0;
+
 	/**
 	 * Returns the client rectangle dimensions.
 	 * The left and top members of the rectangle are always zero.
