@@ -36,8 +36,8 @@
 
 #include "GHOST_Event.h"
 extern "C" {
-#include "IMB_imbuf.h"
-#include "IMB_imbuf_types.h"
+//#include "IMB_imbuf.h"
+//#include "IMB_imbuf_types.h"
 };
 
 /**
@@ -98,7 +98,8 @@ public:
 		
 		switch (m_dragnDropEventData.dataType) {
 			case GHOST_kDragnDropTypeBitmap:
-				IMB_freeImBuf((ImBuf*)m_dragnDropEventData.data);
+				//TODO: something has to be freed here
+				//IMB_freeImBuf((ImBuf*)m_dragnDropEventData.data);
 				break;
 			case GHOST_kDragnDropTypeFilenames:
 			{

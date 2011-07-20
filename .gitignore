@@ -1,0 +1,9 @@
+build/linux/Debug
+build/linux/Release
+build/linux/build32
+build/linux/build64
+build/linux/linux.workspace.session
+build/linux/lib
+build/linux/linux_wsp.mk
+build/linux/testbed.mk
+build/linux/library.mk
