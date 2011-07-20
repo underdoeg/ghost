@@ -7,3 +7,6 @@ build/linux/lib
 build/linux/linux_wsp.mk
 build/linux/testbed.mk
 build/linux/library.mk
+build/win/win.workspace.session
+build/win/lib
+build/win/build32
