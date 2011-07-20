@@ -100,15 +100,16 @@
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="lib/libGhost32.a" IntermediateDirectory="./build32" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[
-      ]]>
+        <![CDATA[]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
         <StartupCommands/>
       </Debugger>
       <PreBuild/>
-      <PostBuild/>
+      <PostBuild>
+        <Command Enabled="yes">sh postBuild32.sh</Command>
+      </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
         <CleanCommand/>
@@ -125,7 +126,7 @@
       </AdditionalRules>
     </Configuration>
     <Configuration Name="64bit" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Static Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g -m64" C_Options="-g -m64" Required="yes" PreCompiledHeader="">
+      <Compiler Options="-g -m64 " C_Options="-g -m64" Required="yes" PreCompiledHeader="">
         <IncludePath Value="."/>
         <IncludePath Value="../.."/>
         <IncludePath Value="../../intern"/>
@@ -142,7 +143,9 @@
         <StartupCommands/>
       </Debugger>
       <PreBuild/>
-      <PostBuild/>
+      <PostBuild>
+        <Command Enabled="yes">sh postBuild64.sh</Command>
+      </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
         <CleanCommand/>

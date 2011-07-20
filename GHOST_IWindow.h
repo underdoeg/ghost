@@ -110,7 +110,14 @@ public:
 	 * @param bounds The bounding rectangle of the window.
 	 */
 	virtual	void getWindowBounds(GHOST_Rect& bounds) const = 0;
-	
+
+	/**
+	 * sets window position.
+	 * @param x The new X position of the window.
+	 * @param y The new Y position of the window.
+	 */
+	virtual	GHOST_TSuccess setWindowPosition(GHOST_TUns32 x, GHOST_TUns32 y) = 0;
+
 	/**
 	 * Returns the client rectangle dimensions.
 	 * The left and top members of the rectangle are always zero.

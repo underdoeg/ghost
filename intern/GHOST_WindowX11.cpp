@@ -718,6 +718,14 @@ getWindowBounds(
 	getClientBounds(bounds);
 }
 
+	GHOST_TSuccess
+GHOST_WindowX11::
+setWindowPosition(GHOST_TUns32 x, GHOST_TUns32 y)
+{
+	XMoveWindow(m_display, m_window, x, y);
+	return GHOST_kSuccess;
+}
+
 	void 
 GHOST_WindowX11::
 getClientBounds(
@@ -1599,3 +1607,4 @@ void glutCustomCursor(char *data1, char *data2, int size)
 }
 
 */
+

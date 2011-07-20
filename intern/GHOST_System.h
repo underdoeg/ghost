@@ -31,6 +31,9 @@
  * Declaration of GHOST_System class.
  */
 
+
+
+
 #ifndef _GHOST_SYSTEM_H_
 #define _GHOST_SYSTEM_H_
 
