@@ -1608,3 +1608,17 @@ void glutCustomCursor(char *data1, char *data2, int size)
 
 */
 
+GHOST_TSuccess GHOST_WindowX11::setWindowBorder(bool hasBorder)
+{
+	MotifWmHints hints;
+
+	hints.flags = MWM_HINTS_DECORATIONS;
+	if (hasBorder == true)
+		hints.decorations = 1;
+	else
+		hints.decorations = 0;
+
+	XChangeProperty(m_display, m_window, m_system->m_motif,
+			m_system->m_motif, 32, PropModeReplace,
+			(unsigned char *) &hints, 4);
+}
