@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Session Name="C:\Users\Administrator\Desktop\ghost\build\win\win.workspace">
+  <int Value="5" Name="m_selectedTab"/>
+  <wxString Value="C:\Users\Administrator\Desktop\ghost\build\win\win.workspace" Name="m_workspaceName"/>
+  <TabInfoArray Name="TabInfoArray">
+    <TabInfo>
+      <wxString Value="C:\Users\Administrator\Desktop\ghost\intern\GHOST_Buttons.h" Name="FileName"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="36" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Administrator\Desktop\ghost\GHOST_Types.h" Name="FileName"/>
+      <int Value="19" Name="FirstVisibleLine"/>
+      <int Value="54" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Administrator\Desktop\ghost\intern\GHOST_WindowWin32.h" Name="FileName"/>
+      <int Value="121" Name="FirstVisibleLine"/>
+      <int Value="152" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Administrator\Desktop\ghost\intern\GHOST_SystemWin32.cpp" Name="FileName"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="43" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Administrator\Desktop\ghost\GHOST_IWindow.h" Name="FileName"/>
+      <int Value="81" Name="FirstVisibleLine"/>
+      <int Value="125" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\Users\Administrator\Desktop\ghost\intern\GHOST_WindowWin32.cpp" Name="FileName"/>
+      <int Value="25" Name="FirstVisibleLine"/>
+      <int Value="62" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+  </TabInfoArray>
+  <SerializedObject Name="m_breakpoints">
+    <long Value="0" Name="Count"/>
+  </SerializedObject>
+</Session>
