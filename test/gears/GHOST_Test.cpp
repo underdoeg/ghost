@@ -290,62 +290,6 @@ static void View(GHOST_IWindow* window, bool stereo, int eye = 0)
 	glClearColor(.2f,0.0f,0.0f,0.0f);
 }
 
-
-void StereoProjection(float left, float right, float bottom, float top, float nearplane, float farplane,
-		float zero_plane, float dist,
-		float eye)
-/* Perform the perspective projection for one eye's subfield.
-The projection is in the direction of the negative z axis.
-
--6.0, 6.0, -4.8, 4.8,
-left, right, bottom, top = the coordinate range, in the plane of zero
-parallax setting, which will be displayed on the screen.  The
-ratio between (right-left) and (top-bottom) should equal the aspect
-ratio of the display.
-
-6.0, -6.0,
-near, far = the z-coordinate values of the clipping planes.
-
-0.0,
-zero_plane = the z-coordinate of the plane of zero parallax setting.
-
-14.5,
-dist = the distance from the center of projection to the plane
-of zero parallax.
-
--0.31
-eye = half the eye separation; positive for the right eye subfield,
-negative for the left eye subfield.
-*/
-{
-	float xmid, ymid, clip_near, clip_far, topw, bottomw, leftw, rightw,
-	dx, dy, n_over_d;
-
-	dx = right - left;
-	dy = top - bottom;
-
-	xmid = (right + left) / 2.0;
-	ymid = (top + bottom) / 2.0;
-
-	clip_near = dist + zero_plane - nearplane;
-	clip_far  = dist + zero_plane - farplane;
-
-	n_over_d = clip_near / dist;
-
-	topw = n_over_d * dy / 2.0;
-	bottomw = -topw;
-	rightw = n_over_d * (dx / 2.0 - eye);
-	leftw  = n_over_d *(-dx / 2.0 - eye);
-
-	/* Need to be in projection mode for this. */
-	glLoadIdentity();
-	glFrustum(leftw,  rightw,  bottomw,  topw,  clip_near,  clip_far);
-
-	glTranslatef(-xmid - eye,  -ymid,  -zero_plane - dist);
-	return;
-} /* stereoproj */
-
-
 class Application : public GHOST_IEventConsumer {
 public:
 	Application(GHOST_ISystem* system);
