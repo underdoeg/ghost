@@ -1134,7 +1134,9 @@ GHOST_TSuccess GHOST_SystemCocoa::handleDraggingEvent(GHOST_TEventType eventType
 				{
 					NSImage *droppedImg = (NSImage*)data;
 					NSSize imgSize = [droppedImg size];
-					ImBuf *ibuf = NULL;
+					
+					//TODO
+					//ImBuf *ibuf = NULL;
 					GHOST_TUns8 *rasterRGB = NULL;
 					GHOST_TUns8 *rasterRGBA = NULL;
 					GHOST_TUns8 *toIBuf = NULL;
@@ -1143,11 +1145,12 @@ GHOST_TSuccess GHOST_SystemCocoa::handleDraggingEvent(GHOST_TEventType eventType
 					NSEnumerator *enumerator;
 					NSImageRep *representation;
 					
-					ibuf = IMB_allocImBuf (imgSize.width , imgSize.height, 32, IB_rect);
-					if (!ibuf) {
+					//TODO
+					//ibuf = IMB_allocImBuf (imgSize.width , imgSize.height, 32, IB_rect);
+					/*if (!ibuf) {
 						[droppedImg release];
 						return GHOST_kFailure;
-					}
+					}*/
 					
 					/*Get the bitmap of the image*/
 					enumerator = [[droppedImg representations] objectEnumerator];
@@ -1162,7 +1165,8 @@ GHOST_TSuccess GHOST_SystemCocoa::handleDraggingEvent(GHOST_TEventType eventType
 					if (([bitmapImage bitsPerPixel] == 32) && (([bitmapImage bitmapFormat] & 0x5) == 0)
 						&& ![bitmapImage isPlanar]) {
 						/* Try a fast copy if the image is a meshed RGBA 32bit bitmap*/
-						toIBuf = (GHOST_TUns8*)ibuf->rect;
+						//TODO
+						//toIBuf = (GHOST_TUns8*)ibuf->rect;
 						rasterRGB = (GHOST_TUns8*)[bitmapImage bitmapData];
 						for (y = 0; y < imgSize.height; y++) {
 							to_i = (imgSize.height-y-1)*imgSize.width;
@@ -1226,7 +1230,8 @@ GHOST_TSuccess GHOST_SystemCocoa::handleDraggingEvent(GHOST_TEventType eventType
 						}
 						
 						/*Copy the image to ibuf, flipping it vertically*/
-						toIBuf = (GHOST_TUns8*)ibuf->rect;
+						//TODO-DGHOST_COCOA
+						//toIBuf = (GHOST_TUns8*)ibuf->rect;
 						for (y = 0; y < imgSize.height; y++) {
 							for (x = 0; x < imgSize.width; x++) {
 								to_i = (imgSize.height-y-1)*imgSize.width + x;
@@ -1244,7 +1249,8 @@ GHOST_TSuccess GHOST_SystemCocoa::handleDraggingEvent(GHOST_TEventType eventType
 						[droppedImg release];
 					}
 					
-					eventData = (GHOST_TEventDataPtr) ibuf;
+					//TODO
+					//eventData = (GHOST_TEventDataPtr) ibuf;
 				}
 					break;
 					

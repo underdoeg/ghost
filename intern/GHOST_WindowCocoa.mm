@@ -1385,3 +1385,13 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowCustomCursorShape(GHOST_TUns8 bitmap[
 {
 	return setWindowCustomCursorShape((GHOST_TUns8*)bitmap, (GHOST_TUns8*) mask, 16, 16, hotX, hotY, 0, 1);
 }
+
+GHOST_TSuccess GHOST_WindowCocoa::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32 y)
+{
+	return GHOST_kFailure;
+}
+
+GHOST_TSuccess GHOST_WindowCocoa::setWindowBorder(bool hasBorder)
+{
+	return GHOST_kFailure;
+}
