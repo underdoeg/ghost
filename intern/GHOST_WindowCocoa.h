@@ -124,6 +124,20 @@ public:
 	 */
 	virtual	void getWindowBounds(GHOST_Rect& bounds) const;
 	
+/**
+	 * sets window position.
+	 * @param x The new X position of the window.
+	 * @param y The new Y position of the window.
+	 */
+	virtual	GHOST_TSuccess setWindowPosition(GHOST_TUns32 x, GHOST_TUns32 y);
+
+	/**
+	 * sets window border.
+	 * @param hasBorder true to draw a border, false to hide it
+	 */
+	virtual	GHOST_TSuccess setWindowBorder(bool hasBorder);
+	
+	
 	/**
 	 * Returns the client rectangle dimensions.
 	 * The left and top members of the rectangle are always zero.
@@ -327,4 +341,3 @@ protected:
 };
 
 #endif // _GHOST_WINDOW_COCOA_H_
-

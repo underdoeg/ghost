@@ -66,19 +66,12 @@
 #define LEFT_EYE  0
 #define RIGHT_EYE 1
 
-static bool nVidiaWindows;  // very dirty but hey, it's for testing only
-
 static void gearsTimerProc(GHOST_ITimerTask* task, GHOST_TUns64 time);
 
 static class Application* fApp;
 static GLfloat view_rotx=20.0, view_roty=30.0, view_rotz=0.0;
 static GLfloat fAngle = 0.0;
 static GHOST_ISystem* fSystem = 0;
-
-
-void StereoProjection(float left, float right, float bottom, float top, float nearplane, float farplane,
-		float zero_plane, float dist,
-		float eye);
 
 
 static void testTimerProc(GHOST_ITimerTask* /*task*/, GHOST_TUns64 time)
@@ -271,36 +264,9 @@ static void View(GHOST_IWindow* window, bool stereo, int eye = 0)
 	float eyeSeparation = 0.62f;
 	window->getClientBounds(bnds);
 
-	// viewport
-	if(stereo)
-	{
-		if(nVidiaWindows)
-		{ 
-			// handled by nVidia driver so act as normal (explicitly put here since
-			// it -is- stereo)
-			glViewport(0, 0, bnds.getWidth(), bnds.getHeight());
-		}
-		else
-		{  // generic cross platform above-below stereo
-			noOfScanlines = (bnds.getHeight() - verticalBlankingInterval) / 2;
-			switch(eye)
-			{
-				case LEFT_EYE:
-					// upper half of window
-					lowerScanline = bnds.getHeight() - noOfScanlines;
-					break;
-				case RIGHT_EYE:
-					// lower half of window
-					lowerScanline = 0;
-					break;
-			}
-		}
-	}
-	else
-	{
-		noOfScanlines = bnds.getHeight();
-		lowerScanline = 0;
-	}
+	
+	noOfScanlines = bnds.getHeight();
+	lowerScanline = 0;
 
 	glViewport(0, lowerScanline, bnds.getWidth(), noOfScanlines);
 
@@ -312,93 +278,17 @@ static void View(GHOST_IWindow* window, bool stereo, int eye = 0)
 	nearplane = 5.0;
 	farplane = 60.0;
 
-	if(stereo)
-	{
-		zeroPlane = 0.0;
-		distance = 14.5;
-		switch(eye)
-		{
-			case LEFT_EYE:
-				StereoProjection(left, right, bottom, top, nearplane, farplane, zeroPlane, distance, -eyeSeparation / 2.0);
-				break;
-			case RIGHT_EYE:
-				StereoProjection(left, right, bottom, top, nearplane, farplane, zeroPlane, distance, eyeSeparation / 2.0);
-				break;
-		}
-	}
-	else
-	{
-//		left = -w;
-//		right = w;
-//		bottom = -h;
-//		top = h;
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glFrustum(left, right, bottom, top, 5.0, 60.0);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glTranslatef(0.0, 0.0, -40.0);
+	
 
-	}
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(left, right, bottom, top, 5.0, 60.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -40.0);
 
 	glClearColor(.2f,0.0f,0.0f,0.0f);
 }
-
-
-void StereoProjection(float left, float right, float bottom, float top, float nearplane, float farplane,
-		float zero_plane, float dist,
-		float eye)
-/* Perform the perspective projection for one eye's subfield.
-The projection is in the direction of the negative z axis.
-
--6.0, 6.0, -4.8, 4.8,
-left, right, bottom, top = the coordinate range, in the plane of zero
-parallax setting, which will be displayed on the screen.  The
-ratio between (right-left) and (top-bottom) should equal the aspect
-ratio of the display.
-
-6.0, -6.0,
-near, far = the z-coordinate values of the clipping planes.
-
-0.0,
-zero_plane = the z-coordinate of the plane of zero parallax setting.
-
-14.5,
-dist = the distance from the center of projection to the plane
-of zero parallax.
-
--0.31
-eye = half the eye separation; positive for the right eye subfield,
-negative for the left eye subfield.
-*/
-{
-	float xmid, ymid, clip_near, clip_far, topw, bottomw, leftw, rightw,
-	dx, dy, n_over_d;
-
-	dx = right - left;
-	dy = top - bottom;
-
-	xmid = (right + left) / 2.0;
-	ymid = (top + bottom) / 2.0;
-
-	clip_near = dist + zero_plane - nearplane;
-	clip_far  = dist + zero_plane - farplane;
-
-	n_over_d = clip_near / dist;
-
-	topw = n_over_d * dy / 2.0;
-	bottomw = -topw;
-	rightw = n_over_d * (dx / 2.0 - eye);
-	leftw  = n_over_d *(-dx / 2.0 - eye);
-
-	/* Need to be in projection mode for this. */
-	glLoadIdentity();
-	glFrustum(leftw,  rightw,  bottomw,  topw,  clip_near,  clip_far);
-
-	glTranslatef(-xmid - eye,  -ymid,  -zero_plane - dist);
-	return;
-} /* stereoproj */
-
 
 class Application : public GHOST_IEventConsumer {
 public:
@@ -671,43 +561,7 @@ bool Application::processEvent(GHOST_IEvent* event)
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	nVidiaWindows = false;
-//	nVidiaWindows = true;
 
-#ifdef WIN32
-	/* Set a couple of settings in the registry for the nVidia detonator driver.
-	 * So this is very specific...
-	 */
-	if(nVidiaWindows)
-	{
-		LONG lresult;
-		HKEY hkey = 0;
-		DWORD dwd = 0;
-		//unsigned char buffer[128];
-
-		CRegKey regkey;
-		//DWORD keyValue;
-//		lresult = regkey.Open(HKEY_LOCAL_MACHINE, "SOFTWARE\\NVIDIA Corporation\\Global\\Stereo3D\\StereoEnable");
-		lresult = regkey.Open(HKEY_LOCAL_MACHINE, "SOFTWARE\\NVIDIA Corporation\\Global\\Stereo3D\\StereoEnable",
-			 KEY_ALL_ACCESS );
-
-		if(lresult == ERROR_SUCCESS)
-			printf("Succesfully opened key\n");
-#if 0
-		lresult = regkey.QueryValue(&keyValue, "StereoEnable");
-		if(lresult == ERROR_SUCCESS)
-			printf("Succesfully queried key\n");
-#endif
-		lresult = regkey.SetValue(HKEY_LOCAL_MACHINE, "SOFTWARE\\NVIDIA Corporation\\Global\\Stereo3D\\StereoEnable",
-				"1");
-		if(lresult == ERROR_SUCCESS)
-			printf("Succesfully set value for key\n");
-		regkey.Close();
-		if(lresult == ERROR_SUCCESS)
-			printf("Succesfully closed key\n");
-//		regkey.Write("2");
-	}
-#endif  // WIN32
 
 	// Create the system
 	GHOST_ISystem::createSystem();
