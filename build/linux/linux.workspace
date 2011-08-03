@@ -7,9 +7,9 @@
       <Project Name="library" ConfigName="64bit"/>
       <Project Name="testbed" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="32bit" Selected="no">
-      <Project Name="testbed" ConfigName="Debug"/>
+    <WorkspaceConfiguration Name="32bit" Selected="yes">
       <Project Name="library" ConfigName="32bit"/>
+      <Project Name="testbed" ConfigName="Debug"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

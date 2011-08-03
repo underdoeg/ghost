@@ -440,6 +440,12 @@ GHOST_WindowX11(
 	XFree(xwmhints);
 	// done setting the icon
 
+	//by default all windows accept d'n'drop
+	Atom XdndAware = XInternAtom(m_display, "XdndAware", False);
+	Atom version=5;
+	XChangeProperty(m_display, m_window, XdndAware, XA_ATOM, 32, PropModeReplace, (unsigned char*)&version, 1);
+
+
 	setTitle(title);
 
 #ifdef WITH_X11_XINPUT

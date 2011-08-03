@@ -77,8 +77,6 @@
     <File Name="../../libs/string/STR_String.h"/>
     <File Name="../../libs/string/STR_String.cpp"/>
   </VirtualDirectory>
-  <Dependencies Name="32bit"/>
-  <Dependencies Name="64bit"/>
   <Settings Type="Static Library">
     <GlobalSettings>
       <Compiler Options="" C_Options="">
@@ -100,7 +98,9 @@
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="lib/libGhost32.a" IntermediateDirectory="./build32" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[
+      
+      ]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
@@ -136,7 +136,9 @@
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="lib/libGhost64.a" IntermediateDirectory="./build64" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[
+      
+      ]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
@@ -162,4 +164,6 @@
       </AdditionalRules>
     </Configuration>
   </Settings>
+  <Dependencies Name="32bit"/>
+  <Dependencies Name="64bit"/>
 </CodeLite_Project>

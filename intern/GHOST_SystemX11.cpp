@@ -96,6 +96,9 @@ static NDOFPlatformInfo sNdofInfo = {NULL, 0, NULL, 0, 0, 0, 0};
 static char *txt_cut_buffer= NULL;
 static char *txt_select_buffer= NULL;
 
+//Atoms for Xdnd
+
+
 using namespace std;
 
 GHOST_SystemX11::

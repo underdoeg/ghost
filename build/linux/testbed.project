@@ -32,12 +32,15 @@
       <Linker Options="" Required="yes">
         <LibraryPath Value="lib/"/>
         <Library Value="GL"/>
-        <Library Value="Ghost64"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[
+      
+      
+      
+      ]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
@@ -71,6 +74,11 @@
         <![CDATA[
       
       
+      
+      
+      
+      
+      
       ]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
@@ -95,4 +103,67 @@
       </AdditionalRules>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="intern">
+    <File Name="../../intern/GHOST_Event.h"/>
+    <File Name="../../intern/GHOST_CallbackEventConsumer.h"/>
+    <File Name="../../intern/GHOST_NDOFManager.h"/>
+    <File Name="../../intern/GHOST_EventDragnDrop.h"/>
+    <File Name="../../intern/GHOST_System.h"/>
+    <File Name="../../intern/GHOST_ISystemPaths.cpp"/>
+    <File Name="../../intern/GHOST_C-api.cpp"/>
+    <File Name="../../intern/GHOST_ModifierKeys.cpp"/>
+    <File Name="../../intern/GHOST_EventButton.h"/>
+    <File Name="../../intern/GHOST_ISystem.cpp"/>
+    <File Name="../../intern/GHOST_NDOFManager.cpp"/>
+    <File Name="../../intern/GHOST_EventManager.cpp"/>
+    <File Name="../../intern/GHOST_WindowX11.h"/>
+    <File Name="../../intern/GHOST_SystemX11.cpp"/>
+    <File Name="../../intern/GHOST_TimerManager.cpp"/>
+    <File Name="../../intern/GHOST_EventWheel.h"/>
+    <File Name="../../intern/GHOST_CallbackEventConsumer.cpp"/>
+    <File Name="../../intern/GHOST_Buttons.cpp"/>
+    <File Name="../../intern/GHOST_EventString.h"/>
+    <File Name="../../intern/GHOST_EventKey.h"/>
+    <File Name="../../intern/GHOST_DisplayManagerX11.h"/>
+    <File Name="../../intern/GHOST_EventTrackpad.h"/>
+    <File Name="../../intern/GHOST_EventCursor.h"/>
+    <File Name="../../intern/GHOST_Window.cpp"/>
+    <File Name="../../intern/GHOST_TimerManager.h"/>
+    <File Name="../../intern/GHOST_EventPrinter.h"/>
+    <File Name="../../intern/GHOST_DisplayManager.cpp"/>
+    <File Name="../../intern/GHOST_SystemPathsX11.cpp"/>
+    <File Name="../../intern/GHOST_ModifierKeys.h"/>
+    <File Name="../../intern/GHOST_EventNDOF.h"/>
+    <File Name="../../intern/GHOST_System.cpp"/>
+    <File Name="../../intern/GHOST_Buttons.h"/>
+    <File Name="../../intern/GHOST_DisplayManager.h"/>
+    <File Name="../../intern/GHOST_Path-api.cpp"/>
+    <File Name="../../intern/GHOST_EventPrinter.cpp"/>
+    <File Name="../../intern/GHOST_Rect.cpp"/>
+    <File Name="../../intern/GHOST_EventManager.h"/>
+    <File Name="../../intern/GHOST_Window.h"/>
+    <File Name="../../intern/GHOST_DisplayManagerX11.cpp"/>
+    <File Name="../../intern/GHOST_TimerTask.h"/>
+    <File Name="../../intern/GHOST_Debug.h"/>
+    <File Name="../../intern/GHOST_WindowX11.cpp"/>
+    <File Name="../../intern/GHOST_SystemPathsX11.h"/>
+    <File Name="../../intern/GHOST_SystemX11.h"/>
+    <File Name="../../intern/GHOST_WindowManager.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="GHOST">
+    <File Name="../../GHOST_C-api.h"/>
+    <File Name="../../GHOST_ISystemPaths.h"/>
+    <File Name="../../GHOST_ITimerTask.h"/>
+    <File Name="../../GHOST_IWindow.h"/>
+    <File Name="../../GHOST_ISystem.h"/>
+    <File Name="../../GHOST_IEventConsumer.h"/>
+    <File Name="../../GHOST_Types.h"/>
+    <File Name="../../GHOST_IEvent.h"/>
+    <File Name="../../GHOST_Path-api.h"/>
+    <File Name="../../GHOST_Rect.h"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="string">
+    <File Name="../../libs/string/STR_String.h"/>
+    <File Name="../../libs/string/STR_String.cpp"/>
+  </VirtualDirectory>
 </CodeLite_Project>
