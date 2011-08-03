@@ -308,6 +308,7 @@ public:
 };
 
 
+
 Application::Application(GHOST_ISystem* system)
 	: m_system(system), m_mainWindow(0), m_secondaryWindow(0), m_fullScreenWindow(0),
 	  m_gearsTimer(0), m_testTimer(0), m_cursor(GHOST_kStandardCursorFirstCursor),
