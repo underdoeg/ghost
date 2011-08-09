@@ -7,7 +7,7 @@
       <Project Name="library" ConfigName="64bit"/>
       <Project Name="testbed" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="32bit" Selected="yes">
+    <WorkspaceConfiguration Name="32bit" Selected="no">
       <Project Name="library" ConfigName="32bit"/>
       <Project Name="testbed" ConfigName="Debug"/>
     </WorkspaceConfiguration>

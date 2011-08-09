@@ -307,8 +307,6 @@ public:
 	bool stereo;
 };
 
-
-
 Application::Application(GHOST_ISystem* system)
 	: m_system(system), m_mainWindow(0), m_secondaryWindow(0), m_fullScreenWindow(0),
 	  m_gearsTimer(0), m_testTimer(0), m_cursor(GHOST_kStandardCursorFirstCursor),
@@ -318,16 +316,17 @@ Application::Application(GHOST_ISystem* system)
 
 	// Create the main window
 	STR_String title1 ("gears - main window");
-	m_mainWindow = system->createWindow(title1, 10, 64, 320, 200, GHOST_kWindowStateNormal,
+	m_mainWindow = system->createWindow(title1, 80, 124, 320, 280, GHOST_kWindowStateNormal,
 		GHOST_kDrawingContextTypeOpenGL, false, false);
     if (!m_mainWindow) {
 		std::cout << "could not create main window\n";
 		exit(-1);
     }
-	m_mainWindow->setWindowOnTop(true);
+
+	//m_mainWindow->setWindowPosition(500, 500);
 	// Create a secondary window
 	STR_String title2 ("gears - secondary window");
-	m_secondaryWindow = system->createWindow(title2, 340, 64, 320, 200, GHOST_kWindowStateNormal,
+	m_secondaryWindow = system->createWindow(title2, 340, 64, 320, 280, GHOST_kWindowStateNormal,
 		GHOST_kDrawingContextTypeOpenGL, false, false);
 	if (!m_secondaryWindow) {
 		cout << "could not create secondary window\n";
@@ -552,7 +551,15 @@ bool Application::processEvent(GHOST_IEvent* event)
 			window2->swapBuffers();
 		}
 		break;
-		
+
+	case GHOST_kEventWindowMove:
+		cout << "WINDOW MOVED" << endl;
+		break;
+
+	case GHOST_kEventWindowSize:
+		cout << "WINDOW RESIZED" << endl;
+		break;
+
 	default:
 		handled = false;
 		break;

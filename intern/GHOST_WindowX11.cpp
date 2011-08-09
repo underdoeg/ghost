@@ -326,6 +326,14 @@ GHOST_WindowX11(
 
 	}
 
+	/**
+	 * UPDATE OLD X Y AND SIZE
+	 */
+	oldX = left;
+	oldY = top;
+	oldW = width;
+	oldH = height;
+
 	/*
 	 * One of the problem with WM-spec is that can't set a property
 	 * to a window that isn't mapped. That is why we can't "just

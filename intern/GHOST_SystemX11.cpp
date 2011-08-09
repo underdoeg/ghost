@@ -268,7 +268,7 @@ createWindow(
 			// Store the pointer to the window 
 			m_windowManager->addWindow(window);
 			m_windowManager->setActiveWindow(window);
-			pushEvent( new GHOST_Event(getMilliSeconds(), GHOST_kEventWindowSize, window) );
+			//pushEvent( new GHOST_Event(getMilliSeconds(), GHOST_kEventWindowSize, window) );
 		}
 		else {
 			delete window;
@@ -436,6 +436,8 @@ GHOST_SystemX11::processEvent(XEvent *xe)
 	GHOST_WindowX11 * window = findGhostWindow(xe->xany.window);	
 	GHOST_Event * g_event = NULL;
 
+
+
 	if (!window) {
 		return;
 	}
@@ -593,14 +595,29 @@ GHOST_SystemX11::processEvent(XEvent *xe)
 			// change of size, border, layer etc.
 		case ConfigureNotify:
 		{
-			/* XConfigureEvent & xce = xe->xconfigure; */
-
-			g_event = new 
-			GHOST_Event(
-				getMilliSeconds(),
-				GHOST_kEventWindowSize,
-				window
-			);			
+			XConfigureEvent & xce = xe->xconfigure;
+			GHOST_Rect bounds;
+			//cout << window->oldX << " - " << window->oldY << " | " << xce.x << " - " << xce.y << endl;
+			//cout << window->oldW << " - " << window->oldH << " | " << xce.width << " - " << xce.height << endl;
+			if(xce.width!=window->oldW || xce.height!=window->oldH){ //resize event
+				pushEvent(new
+				GHOST_Event(
+					getMilliSeconds(),
+					GHOST_kEventWindowSize,
+					window
+				));
+				window->oldW = xce.width;
+				window->oldH = xce.height;
+			}else if(window->oldX != xce.x || window->oldY != xce.y){
+				pushEvent(new
+				GHOST_Event(
+					getMilliSeconds(),
+					GHOST_kEventWindowMove,
+					window
+				));
+				window->oldX = xce.x;
+				window->oldY = xce.y;
+			}
 			break;
 		}
 
@@ -733,6 +750,8 @@ GHOST_SystemX11::processEvent(XEvent *xe)
 		case MappingNotify:
 		case ReparentNotify:
 			break;
+		case GravityNotify:
+			break;
 		case SelectionRequest:
 		{
 			XEvent nxe;
@@ -783,7 +802,8 @@ GHOST_SystemX11::processEvent(XEvent *xe)
 			break;
 		}
 		
-		default: {
+		default:
+		{
 #ifdef WITH_X11_XINPUT
 			if(xe->type == window->GetXTablet().MotionEvent) 
 			{
