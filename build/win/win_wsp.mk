@@ -2,7 +2,7 @@
 
 All:
 	@echo ----------Building project:[ library - 32bit ]----------
-	@"mingw32-make.exe"  -j 1 -f "library.mk"
+	@"C:\MinGW32\bin\mingw32-make.exe"  -j 1 -f "library.mk"
 clean:
 	@echo ----------Cleaning project:[ library - 32bit ]----------
-	@"mingw32-make.exe"  -j 1 -f "library.mk" clean
+	@"C:/MinGW32/bin/mingw32-make.exe"  -j 1 -f "library.mk" clean

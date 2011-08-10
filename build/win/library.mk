@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Administrator
-Date                   :=07/20/11
+Date                   :=08/10/11
 CodeLitePath           :="C:\Program Files\CodeLite"
 LinkerName             :=g++
 ArchiveTool            :=ar rcus
@@ -42,7 +42,7 @@ C_CmpOptions           := -g -m32 -DFREE_WINDOWS $(Preprocessors)
 LinkOptions            :=  
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)../.. $(IncludeSwitch)../../intern $(IncludeSwitch)../../libs/string $(IncludeSwitch)../../libs/wintab 
 RcIncludePath          :=
-Libs                   :=
+Libs                   :=$(LibrarySwitch)opengl32 $(LibrarySwitch)opengl32 
 LibPath                := $(LibraryPathSwitch). 
 
 
@@ -56,7 +56,7 @@ WXCFG:=gcc_dll\mswu
 UNIT_TEST_PP_SRC_DIR:=C:\UnitTest++-1.3
 Objects=$(IntermediateDirectory)/intern_GHOST_ISystemPaths$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_C-api$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_ModifierKeys$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_ISystem$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_NDOFManager$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_EventManager$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_WindowManager$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_TimerManager$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_CallbackEventConsumer$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_Buttons$(ObjectSuffix) \
 	$(IntermediateDirectory)/intern_GHOST_Window$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_DisplayManager$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_System$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_Path-api$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_EventPrinter$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_Rect$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_DisplayManagerWin32$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_SystemPathsWin32$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_SystemWin32$(ObjectSuffix) $(IntermediateDirectory)/intern_GHOST_WindowWin32$(ObjectSuffix) \
-	$(IntermediateDirectory)/string_STR_String$(ObjectSuffix) 
+	$(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(ObjectSuffix) $(IntermediateDirectory)/string_STR_String$(ObjectSuffix) 
 
 ##
 ## Main Build Targets 
@@ -66,9 +66,6 @@ all: $(IntermediateDirectory) $(OutputFile)
 $(OutputFile): $(Objects)
 	@$(MakeDirCommand) $(@D)
 	$(ArchiveTool) $(ArchiveOutputSwitch)$(OutputFile) $(Objects)
-	@echo Executing Post Build commands ...
-	sh postBuild32.sh
-	@echo Done
 
 objects_file:
 	@echo $(Objects) > $(ObjectsFileList)
@@ -242,6 +239,14 @@ $(IntermediateDirectory)/intern_GHOST_WindowWin32$(DependSuffix): ../../intern/G
 $(IntermediateDirectory)/intern_GHOST_WindowWin32$(PreprocessSuffix): ../../intern/GHOST_WindowWin32.cpp
 	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/intern_GHOST_WindowWin32$(PreprocessSuffix) "C:/Users/Administrator/Desktop/ghost/intern/GHOST_WindowWin32.cpp"
 
+$(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(ObjectSuffix): ../../intern/GHOST_DropTargetWin32.cpp $(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(DependSuffix)
+	$(CompilerName) $(SourceSwitch) "C:/Users/Administrator/Desktop/ghost/intern/GHOST_DropTargetWin32.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(DependSuffix): ../../intern/GHOST_DropTargetWin32.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(ObjectSuffix) -MF$(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(DependSuffix) -MM "C:/Users/Administrator/Desktop/ghost/intern/GHOST_DropTargetWin32.cpp"
+
+$(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(PreprocessSuffix): ../../intern/GHOST_DropTargetWin32.cpp
+	@$(CompilerName) $(CmpOptions) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(PreprocessSuffix) "C:/Users/Administrator/Desktop/ghost/intern/GHOST_DropTargetWin32.cpp"
+
 $(IntermediateDirectory)/string_STR_String$(ObjectSuffix): ../../libs/string/STR_String.cpp $(IntermediateDirectory)/string_STR_String$(DependSuffix)
 	$(CompilerName) $(SourceSwitch) "C:/Users/Administrator/Desktop/ghost/libs/string/STR_String.cpp" $(CmpOptions) $(ObjectSwitch)$(IntermediateDirectory)/string_STR_String$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/string_STR_String$(DependSuffix): ../../libs/string/STR_String.cpp
@@ -316,6 +321,9 @@ clean:
 	$(RM) $(IntermediateDirectory)/intern_GHOST_WindowWin32$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/intern_GHOST_WindowWin32$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/intern_GHOST_WindowWin32$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/intern_GHOST_DropTargetWin32$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/string_STR_String$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/string_STR_String$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/string_STR_String$(PreprocessSuffix)
