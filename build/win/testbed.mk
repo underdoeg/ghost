@@ -42,7 +42,7 @@ C_CmpOptions           := -g $(Preprocessors)
 LinkOptions            :=  
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)../.. $(IncludeSwitch)../../intern $(IncludeSwitch)../../libs/string 
 RcIncludePath          :=
-Libs                   :=$(LibrarySwitch)Ghost32 $(LibrarySwitch)ole32 $(LibrarySwitch)opengl32 $(LibrarySwitch)glu32 $(LibrarySwitch)gdi32 $(LibrarySwitch)user32 
+Libs                   :=$(LibrarySwitch)Ghost32 $(LibrarySwitch)opengl32 $(LibrarySwitch)glu32 $(LibrarySwitch)gdi32 $(LibrarySwitch)user32 $(LibrarySwitch)ole32 $(LibrarySwitch)gdi32 $(LibrarySwitch)uuid 
 LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)lib/ 
 
 

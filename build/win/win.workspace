@@ -3,11 +3,11 @@
   <Project Name="library" Path="library.project" Active="No"/>
   <Project Name="testbed" Path="testbed.project" Active="Yes"/>
   <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="no">
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="library" ConfigName="32bit"/>
       <Project Name="testbed" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
+    <WorkspaceConfiguration Name="Release" Selected="no">
       <Project Name="library" ConfigName="32bit"/>
       <Project Name="testbed" ConfigName="Release"/>
     </WorkspaceConfiguration>

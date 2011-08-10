@@ -32,11 +32,13 @@
       <Linker Options="" Required="yes">
         <LibraryPath Value="lib/"/>
         <Library Value="Ghost32"/>
-        <Library Value="ole32"/>
         <Library Value="opengl32"/>
         <Library Value="glu32"/>
         <Library Value="gdi32"/>
         <Library Value="user32"/>
+        <Library Value="ole32"/>
+        <Library Value="gdi32"/>
+        <Library Value="uuid"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
