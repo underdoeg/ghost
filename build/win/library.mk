@@ -2,10 +2,10 @@
 ## Auto Generated makefile by CodeLite IDE
 ## any manual changes will be erased      
 ##
-## 32bit
+## 64bit
 ProjectName            :=library
-ConfigurationName      :=32bit
-IntermediateDirectory  :=./build32
+ConfigurationName      :=64bit
+IntermediateDirectory  :=./build64
 OutDir                 := $(IntermediateDirectory)
 WorkspacePath          := "C:\Users\Administrator\Desktop\ghost\build\win"
 ProjectPath            := "C:\Users\Administrator\Desktop\ghost\build\win"
@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Administrator
-Date                   :=08/10/11
+Date                   :=08/11/11
 CodeLitePath           :="C:\Program Files\CodeLite"
 LinkerName             :=g++
 ArchiveTool            :=ar rcus
@@ -30,19 +30,19 @@ PreprocessorSwitch     :=-D
 SourceSwitch           :=-c 
 CompilerName           :=g++
 C_CompilerName         :=gcc
-OutputFile             :=lib/libGhost32.a
+OutputFile             :=lib/libGhost64.a
 Preprocessors          :=
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
 PreprocessOnlySwitch   :=-E 
 ObjectsFileList        :="C:\Users\Administrator\Desktop\ghost\build\win\library.txt"
 MakeDirCommand         :=makedir
-CmpOptions             := -g -m32 -DFREE_WINDOWS $(Preprocessors)
-C_CmpOptions           := -g -m32 -DFREE_WINDOWS $(Preprocessors)
+CmpOptions             := -g -m64  $(Preprocessors)
+C_CmpOptions           := -g -m64 $(Preprocessors)
 LinkOptions            :=  
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)../.. $(IncludeSwitch)../../intern $(IncludeSwitch)../../libs/string $(IncludeSwitch)../../libs/wintab 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)../.. $(IncludeSwitch)../../intern $(IncludeSwitch)../../libs/string 
 RcIncludePath          :=
-Libs                   :=$(LibrarySwitch)opengl32 $(LibrarySwitch)opengl32 
+Libs                   :=$(LibrarySwitch)opengl32 
 LibPath                := $(LibraryPathSwitch). 
 
 
@@ -66,12 +66,15 @@ all: $(IntermediateDirectory) $(OutputFile)
 $(OutputFile): $(Objects)
 	@$(MakeDirCommand) $(@D)
 	$(ArchiveTool) $(ArchiveOutputSwitch)$(OutputFile) $(Objects)
+	@echo Executing Post Build commands ...
+	sh postBuild64.sh
+	@echo Done
 
 objects_file:
 	@echo $(Objects) > $(ObjectsFileList)
 
-./build32:
-	@$(MakeDirCommand) "./build32"
+./build64:
+	@$(MakeDirCommand) "./build64"
 
 PreBuild:
 

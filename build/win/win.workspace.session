@@ -11,8 +11,8 @@
     </TabInfo>
     <TabInfo>
       <wxString Value="C:\Users\Administrator\Desktop\ghost\GHOST_Types.h" Name="FileName"/>
-      <int Value="19" Name="FirstVisibleLine"/>
-      <int Value="54" Name="CurrentLine"/>
+      <int Value="160" Name="FirstVisibleLine"/>
+      <int Value="172" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
     <TabInfo>
@@ -23,8 +23,8 @@
     </TabInfo>
     <TabInfo>
       <wxString Value="C:\Users\Administrator\Desktop\ghost\intern\GHOST_SystemWin32.cpp" Name="FileName"/>
-      <int Value="0" Name="FirstVisibleLine"/>
-      <int Value="43" Name="CurrentLine"/>
+      <int Value="400" Name="FirstVisibleLine"/>
+      <int Value="425" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
     <TabInfo>
@@ -41,8 +41,8 @@
     </TabInfo>
     <TabInfo>
       <wxString Value="C:\Users\Administrator\Desktop\ghost\test\gears\GHOST_Test.cpp" Name="FileName"/>
-      <int Value="698" Name="FirstVisibleLine"/>
-      <int Value="723" Name="CurrentLine"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="26" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
   </TabInfoArray>

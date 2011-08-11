@@ -3,13 +3,13 @@
   <Project Name="library" Path="library.project" Active="No"/>
   <Project Name="testbed" Path="testbed.project" Active="Yes"/>
   <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="yes">
+    <WorkspaceConfiguration Name="32" Selected="no">
       <Project Name="library" ConfigName="32bit"/>
       <Project Name="testbed" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="no">
-      <Project Name="library" ConfigName="32bit"/>
-      <Project Name="testbed" ConfigName="Release"/>
+    <WorkspaceConfiguration Name="64" Selected="yes">
+      <Project Name="testbed" ConfigName="Debug"/>
+      <Project Name="library" ConfigName="64bit"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
