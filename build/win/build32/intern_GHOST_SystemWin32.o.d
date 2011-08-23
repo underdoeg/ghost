@@ -19,7 +19,6 @@ build32/intern_GHOST_SystemWin32.o: \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_EventCursor.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_EventKey.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_EventWheel.h \
- C:/Users/Administrator/Desktop/ghost/intern/GHOST_EventNDOF.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_TimerTask.h \
  ../../GHOST_ITimerTask.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_TimerManager.h \
@@ -29,6 +28,7 @@ build32/intern_GHOST_SystemWin32.o: \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_Window.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_TaskbarWin32.h \
  ../../libs/wintab/wintab.h ../../libs/wintab/pktdef.h \
+ C:/Users/Administrator/Desktop/ghost/intern/GHOST_NDOFManagerWin32.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_NDOFManager.h
 
 C:/Users/Administrator/Desktop/ghost/intern/GHOST_SystemWin32.h:
@@ -79,8 +79,6 @@ C:/Users/Administrator/Desktop/ghost/intern/GHOST_EventKey.h:
 
 C:/Users/Administrator/Desktop/ghost/intern/GHOST_EventWheel.h:
 
-C:/Users/Administrator/Desktop/ghost/intern/GHOST_EventNDOF.h:
-
 C:/Users/Administrator/Desktop/ghost/intern/GHOST_TimerTask.h:
 
 ../../GHOST_ITimerTask.h:
@@ -102,5 +100,7 @@ C:/Users/Administrator/Desktop/ghost/intern/GHOST_TaskbarWin32.h:
 ../../libs/wintab/wintab.h:
 
 ../../libs/wintab/pktdef.h:
+
+C:/Users/Administrator/Desktop/ghost/intern/GHOST_NDOFManagerWin32.h:
 
 C:/Users/Administrator/Desktop/ghost/intern/GHOST_NDOFManager.h:

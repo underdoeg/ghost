@@ -44,7 +44,7 @@
 #if defined(WIN32) || defined(__APPLE__)
 	#ifdef WIN32
 		#include <windows.h>
-		#include <atlbase.h>
+//		#include <atlbase.h>
 
 		#include <GL/gl.h>
 	#else // WIN32

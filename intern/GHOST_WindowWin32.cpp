@@ -1349,3 +1349,13 @@ static int EnumPixelFormats(HDC hdc) {
 }
 
 
+GHOST_TSuccess GHOST_WindowWin32::setWindowBorder(bool hasBorder)
+{
+	
+}
+
+GHOST_TSuccess GHOST_WindowWin32::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32 y)
+{
+	
+}
+

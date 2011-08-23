@@ -11,12 +11,11 @@ build32/intern_GHOST_System.o: \
  ../../GHOST_IEventConsumer.h ../../GHOST_IEvent.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_DisplayManager.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_NDOFManager.h \
- ../../GHOST_IWindow.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_TimerTask.h \
  ../../GHOST_ITimerTask.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_TimerManager.h \
  C:/Users/Administrator/Desktop/ghost/intern/GHOST_WindowManager.h \
- ../../GHOST_Rect.h
+ ../../GHOST_Rect.h ../../GHOST_IWindow.h
 
 C:/Users/Administrator/Desktop/ghost/intern/GHOST_System.h:
 
@@ -50,8 +49,6 @@ C:/Users/Administrator/Desktop/ghost/intern/GHOST_DisplayManager.h:
 
 C:/Users/Administrator/Desktop/ghost/intern/GHOST_NDOFManager.h:
 
-../../GHOST_IWindow.h:
-
 C:/Users/Administrator/Desktop/ghost/intern/GHOST_TimerTask.h:
 
 ../../GHOST_ITimerTask.h:
@@ -61,3 +58,5 @@ C:/Users/Administrator/Desktop/ghost/intern/GHOST_TimerManager.h:
 C:/Users/Administrator/Desktop/ghost/intern/GHOST_WindowManager.h:
 
 ../../GHOST_Rect.h:
+
+../../GHOST_IWindow.h:

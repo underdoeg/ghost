@@ -423,6 +423,7 @@ GHOST_TKey GHOST_SystemWin32::hardKey(GHOST_IWindow *window, RAWINPUT const& raw
 	if(!keyDown)
 		return GHOST_kKeyUnknown;
 
+	//GetRawInputData((HRAWINPUT)lParam, RID_INPUT, 0, &size, sizeof(RAWINPUTHEADER));
 
 	GHOST_SystemWin32 *system = (GHOST_SystemWin32 *)getSystem();
 
@@ -1322,11 +1323,13 @@ int GHOST_SystemWin32::toggleConsole(int action)
 				break;
 			}
 		case 0: //hide
-			ShowWindow(GetConsoleWindow(),SW_HIDE);
+			//TODO
+			//ShowWindow(GetConsoleWindow(),SW_HIDE);
 			m_consoleStatus = 0;
 			break;
 		case 1: //show
-			ShowWindow(GetConsoleWindow(),SW_SHOW);
+			//TODO
+			//ShowWindow(GetConsoleWindow(),SW_SHOW);
 			m_consoleStatus = 1;
 			break;
 		case 2: //toggle
