@@ -51,9 +51,10 @@ typedef	unsigned int		GHOST_TUns32;
 #ifdef WIN32
 #define WM_BLND_NDOF_AXIS	WM_USER + 1
 #define WM_BLND_NDOF_BTN 	WM_USER + 2
+#include "_mingw.h"
 #endif
 
-#include "_mingw.h"
+
 
 
 #if defined(WIN32) && !defined(FREE_WINDOWS)
