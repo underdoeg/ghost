@@ -50,6 +50,8 @@
 #include <algorithm>
 #include <string>
 
+#include <icon.h>
+
 // For obscure full screen mode stuuf
 // lifted verbatim from blut.
 
@@ -401,51 +403,7 @@ GHOST_WindowX11(
 	}
 
 	// Set the window icon
-	XWMHints *xwmhints = XAllocWMHints();
-	XImage *x_image, *mask_image;
-	Pixmap icon_pixmap, mask_pixmap;
-	icon_pixmap = XCreatePixmap(display, m_window, BLENDER_ICON_WIDTH, BLENDER_ICON_HEIGHT, 24);
-	mask_pixmap = XCreatePixmap(display, m_window, BLENDER_ICON_WIDTH, BLENDER_ICON_HEIGHT, 1);
-	GC gc_icon = XCreateGC(display, icon_pixmap, 0, NULL);
-	GC gc_mask = XCreateGC(display, mask_pixmap, 0, NULL);
-
-	x_image = XCreateImage( display, m_visual->visual, 24, ZPixmap, 0, NULL, BLENDER_ICON_WIDTH, BLENDER_ICON_HEIGHT, 32, 0 );
-	mask_image = XCreateImage( display, m_visual->visual, 1, ZPixmap, 0, NULL,  BLENDER_ICON_WIDTH, BLENDER_ICON_HEIGHT, 8, 0);
-
-	x_image->data = (char *)malloc(x_image->bytes_per_line * BLENDER_ICON_HEIGHT);
-	mask_image->data = (char *)malloc( mask_image->bytes_per_line * BLENDER_ICON_HEIGHT);
-
-	/* copy the BLENDER_ICON_48x48x24 into the XImage */
-	unsigned char *col = BLENDER_ICON_48x48x24;
-	int px, py;
-	for (px=0; px<BLENDER_ICON_WIDTH; px++) {
-		for (py=0; py<BLENDER_ICON_HEIGHT; py++, col+=3) {
-			/* mask out pink */
-			if (col[0]==255 && col[1] == 0 && col[2]== 255) {
-				XPutPixel(mask_image, px, py, 0 );
-			} else {
-				XPutPixel(x_image, px, py, (col[0]<<16)+(col[1]<<8)+col[2] );
-				XPutPixel(mask_image, px, py, 1 );
-			}
-		}
-	}
-
-	XPutImage(display, icon_pixmap, gc_icon, x_image, 0, 0, 0, 0, BLENDER_ICON_WIDTH, BLENDER_ICON_HEIGHT);
-	XPutImage(display, mask_pixmap, gc_mask, mask_image, 0, 0, 0, 0, BLENDER_ICON_WIDTH, BLENDER_ICON_HEIGHT);
-
-	// Now the pixmap is ok to assign to the window as a hint
-	xwmhints->icon_pixmap = icon_pixmap;
-	xwmhints->icon_mask = mask_pixmap;
-	XFreeGC (display, gc_icon);
-	XFreeGC (display, gc_mask);
-	XDestroyImage( x_image ); /* frees x_image->data too */
-	XDestroyImage( mask_image );
-
-	xwmhints->initial_state = NormalState;
-	xwmhints->input= True;
-	xwmhints->flags= InputHint|IconPixmapHint|IconMaskHint|StateHint;
-	XSetWMHints(display, m_window, xwmhints );
-	XFree(xwmhints);
+	setIcon(logoPixels, logoPixelsW, logoPixelsH);
 	// done setting the icon
 
 	//by default all windows accept d'n'drop
@@ -1389,6 +1347,58 @@ removeDrawingContext(
 		success = GHOST_kFailure;
 	}
 	return success;
+}
+
+	GHOST_TSuccess
+GHOST_WindowX11::
+setIcon(GHOST_TUns8* pixels,
+	int sizex,
+	int sizey
+){
+	// Set the window icon
+	XWMHints *xwmhints = XAllocWMHints();
+	XImage *x_image, *mask_image;
+	Pixmap icon_pixmap, mask_pixmap;
+	icon_pixmap = XCreatePixmap(m_display, m_window, sizex, sizey, 24);
+	mask_pixmap = XCreatePixmap(m_display, m_window, sizey, sizey, 1);
+	GC gc_icon = XCreateGC(m_display, icon_pixmap, 0, NULL);
+	GC gc_mask = XCreateGC(m_display, mask_pixmap, 0, NULL);
+
+	x_image = XCreateImage( m_display, m_visual->visual, 24, ZPixmap, 0, NULL, sizex, sizey, 32, 0 );
+	mask_image = XCreateImage( m_display, m_visual->visual, 1, ZPixmap, 0, NULL,  sizey, sizey, 8, 0);
+
+	x_image->data = (char *)malloc(x_image->bytes_per_line * sizey);
+	mask_image->data = (char *)malloc( mask_image->bytes_per_line * sizey);
+
+	/* copy the BLENDER_ICON_48x48x32 into the XImage */
+	int px, py;
+	for (px=0; px<sizex; px++) {
+		for (py=0; py<sizey; py++) {
+			/* mask out pink */
+			int i = py*sizex*4+px*4;
+			XPutPixel(x_image, px, py, (pixels[i]<<16)+(pixels[i+1]<<8)+pixels[i+2] );
+			XPutPixel(mask_image, px, py, pixels[i+3] );
+		}
+	}
+
+	XPutImage(m_display, icon_pixmap, gc_icon, x_image, 0, 0, 0, 0, sizex, sizey);
+	XPutImage(m_display, mask_pixmap, gc_mask, mask_image, 0, 0, 0, 0, sizex, sizey);
+
+	// Now the pixmap is ok to assign to the window as a hint
+	xwmhints->icon_pixmap = icon_pixmap;
+	xwmhints->icon_mask = mask_pixmap;
+	XFreeGC (m_display, gc_icon);
+	XFreeGC (m_display, gc_mask);
+	XDestroyImage( x_image ); /* frees x_image->data too */
+	XDestroyImage( mask_image );
+
+	xwmhints->initial_state = NormalState;
+	xwmhints->input= True;
+	xwmhints->flags= InputHint|IconPixmapHint|IconMaskHint|StateHint;
+	XSetWMHints(m_display, m_window, xwmhints );
+	XFree(xwmhints);
+	// done setting the icon
+	return GHOST_kSuccess;
 }
 
 

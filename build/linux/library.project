@@ -77,6 +77,11 @@
     <File Name="../../libs/string/STR_String.h"/>
     <File Name="../../libs/string/STR_String.cpp"/>
   </VirtualDirectory>
+  <Dependencies Name="32bit"/>
+  <Dependencies Name="64bit"/>
+  <VirtualDirectory Name="icon">
+    <File Name="../../icon/icon.h"/>
+  </VirtualDirectory>
   <Settings Type="Static Library">
     <GlobalSettings>
       <Compiler Options="" C_Options="">
@@ -88,19 +93,18 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
     <Configuration Name="32bit" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Static Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g -m32" C_Options="-g -m32" Required="yes" PreCompiledHeader="">
+      <Compiler Options="-g -m32" C_Options="-g -m32" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="."/>
         <IncludePath Value="../.."/>
         <IncludePath Value="../../intern"/>
         <IncludePath Value="../../libs/string"/>
+        <IncludePath Value="../../icon"/>
       </Compiler>
       <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="lib/libGhost32.a" IntermediateDirectory="./build32" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[
-      
-      ]]>
+        <![CDATA[]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
@@ -126,19 +130,18 @@
       </AdditionalRules>
     </Configuration>
     <Configuration Name="64bit" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Static Library" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g -m64 " C_Options="-g -m64" Required="yes" PreCompiledHeader="">
+      <Compiler Options="-g -m64 " C_Options="-g -m64" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="."/>
         <IncludePath Value="../.."/>
         <IncludePath Value="../../intern"/>
         <IncludePath Value="../../libs/string"/>
+        <IncludePath Value="../../icon"/>
       </Compiler>
       <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="lib/libGhost64.a" IntermediateDirectory="./build64" Command="" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[
-      
-      ]]>
+        <![CDATA[]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
         <PostConnectCommands/>
@@ -164,6 +167,4 @@
       </AdditionalRules>
     </Configuration>
   </Settings>
-  <Dependencies Name="32bit"/>
-  <Dependencies Name="64bit"/>
 </CodeLite_Project>

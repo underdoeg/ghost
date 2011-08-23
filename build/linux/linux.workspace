@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CodeLite_Workspace Name="linux" Database="./linux.tags">
-  <Project Name="library" Path="library.project" Active="No"/>
   <Project Name="testbed" Path="testbed.project" Active="Yes"/>
+  <Project Name="library" Path="library.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="64bit" Selected="yes">
-      <Project Name="library" ConfigName="64bit"/>
       <Project Name="testbed" ConfigName="Debug"/>
+      <Project Name="library" ConfigName="64bit"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="32bit" Selected="no">
-      <Project Name="library" ConfigName="32bit"/>
       <Project Name="testbed" ConfigName="Debug"/>
+      <Project Name="library" ConfigName="32bit"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
