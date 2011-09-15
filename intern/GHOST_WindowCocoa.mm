@@ -1393,10 +1393,12 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32
 
 GHOST_TSuccess GHOST_WindowCocoa::setWindowBorder(bool hasBorder)
 {
-	if(hasBorder){
+	if(!hasBorder){
 		[m_window setStyleMask:NSBorderlessWindowMask];
+		m_systemCocoa->handleWindowEvent(GHOST_kEventWindowSize, this);
+		return GHOST_kSuccess;
 	}else{
-		setState(GHOST_kWindowStateNormal);
+		return setState(GHOST_kWindowStateNormal);
 	}
-	return GHOST_kFailure;
+	
 }
