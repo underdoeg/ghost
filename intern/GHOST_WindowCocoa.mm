@@ -1369,7 +1369,7 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowCustomCursorShape(GHOST_TUns8 *bitmap
 	//foreground and background color parameter is not handled for now (10.6)
 	m_customCursor = [[NSCursor alloc] initWithImage:cursorImage
 											 hotSpot:hotSpotPoint];
-	
+		
 	[cursorImageRep release];
 	[cursorImage release];
 	
@@ -1393,5 +1393,10 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32
 
 GHOST_TSuccess GHOST_WindowCocoa::setWindowBorder(bool hasBorder)
 {
+	if(hasBorder){
+		[m_window setStyleMask:NSBorderlessWindowMask];
+	}else{
+		setState(GHOST_kWindowStateNormal);
+	}
 	return GHOST_kFailure;
 }
