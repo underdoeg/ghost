@@ -1104,9 +1104,6 @@ GHOST_TSuccess GHOST_WindowCocoa::setIcon(GHOST_TUns8* pixels, int sizex, int si
 	NSImage *dockIcon = [[NSImage alloc] initWithSize:NSMakeSize(sizex, sizey)];
 	
 	[dockIcon addRepresentation:bitmap];
-	
-	NSData *data = [bitmap representationUsingType: NSPNGFileType properties: nil];
-	[data writeToFile: @"/Users/phwhitfield/Pictures/test.png" atomically: NO];
 		
 	[NSApp setApplicationIconImage:dockIcon];
 	[dockIcon release];
@@ -1424,8 +1421,15 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32
 	GHOST_Rect bounds;
 	getWindowBounds(bounds); 
 	
+	NSRect frame = [m_window.screen visibleFrame];
+	NSRect contentRect = [NSWindow contentRectForFrameRect:frame
+												 styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask)];
+	
+	GHOST_TInt32 bottom = (contentRect.size.height - 1) - bounds.getHeight() - y;
+	
+	
 	// Create a rect to send to the window
-	NSRect newFrame = NSMakeRect(x, y, bounds.getWidth(), bounds.getHeight());
+	NSRect newFrame = NSMakeRect(x, bottom, bounds.getWidth(), bounds.getHeight());
 	
 	// Send message to the window to resize/relocate
 	[m_window setFrame:newFrame display:YES animate:NO];
