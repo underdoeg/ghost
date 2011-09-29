@@ -150,6 +150,7 @@ static unsigned char BLENDER_ICON_48x48x24[] = {
 
 
 GLXContext GHOST_WindowX11::s_firstContext = NULL;
+std::map<Display*, GLXContext> GHOST_WindowX11::contexts;
 
 GHOST_WindowX11::
 GHOST_WindowX11(
@@ -1303,12 +1304,14 @@ installDrawingContext(
 ){
 	// only support openGL for now.
 	GHOST_TSuccess success;
+	s_firstContext = contexts[m_display];
 	switch (type) {
 	case GHOST_kDrawingContextTypeOpenGL:
 		m_context = glXCreateContext(m_display, m_visual, s_firstContext, True);
 		if (m_context !=NULL) {
 			if (!s_firstContext) {
 				s_firstContext = m_context;
+				contexts[m_display] = m_context;
 			}
 			glXMakeCurrent(m_display, m_window,m_context);
 			success = GHOST_kSuccess;

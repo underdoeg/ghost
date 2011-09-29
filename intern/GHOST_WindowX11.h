@@ -362,6 +362,7 @@ private :
 
 	/** The first created OpenGL context (for sharing display lists) */
 	static GLXContext s_firstContext;
+	static std::map<Display*, GLXContext> contexts;
 
 	/// A pointer to the typed system class.
 	

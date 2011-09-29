@@ -1,1 +1,1 @@
-./Debug/gears_GHOST_Test.o
+./Debug/gears_GHOST_Test.o ./Debug/string_STR_String.o
