@@ -28,3 +28,7 @@ build/mac/mac_wsp.mk
 *.mode1v3
 *.build
 *.a
+*.obj
+
+build/win_vs/Debug/
+build/win_vs/Release/

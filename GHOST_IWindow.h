@@ -128,7 +128,7 @@ public:
 	 * sets window to top
 	 * @param alwaysOnTop true to have the window always on top
 	 */
-	virtual	GHOST_TSuccess setWindowOnTop(bool alwaysOnTop) {};
+	virtual	GHOST_TSuccess setWindowOnTop(bool alwaysOnTop) {return GHOST_kSuccess;};
 
 	/**
 	 * Returns the client rectangle dimensions.
