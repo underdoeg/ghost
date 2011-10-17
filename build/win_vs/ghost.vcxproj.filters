@@ -163,6 +163,7 @@
     <ClInclude Include="..\..\GHOST_IWindow.h" />
     <ClInclude Include="..\..\GHOST_Path-api.h" />
     <ClInclude Include="..\..\GHOST_Rect.h" />
+    <ClInclude Include="..\..\libs\string\STR_String.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\intern\GHOST_WindowManager.cpp">
@@ -231,5 +232,6 @@
     <ClCompile Include="..\..\intern\GHOST_Window.cpp">
       <Filter>Header Files\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libs\string\STR_String.cpp" />
   </ItemGroup>
 </Project>

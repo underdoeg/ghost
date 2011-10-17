@@ -45,15 +45,18 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
     <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PostBuildEventUseInBuild>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)_debug</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..;..\..;..\..\include;..\..\intern;..\..\libs\string;..\..\libs\wintab;D:\projects\openframeworks_007\libs\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <StringPooling>
+      </StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/ghost.pch</PrecompiledHeaderOutputFile>
@@ -88,21 +91,23 @@ ECHO Done
       <AdditionalIncludeDirectories>..;..\..;..\..\include;..\..\intern;..\..\libs\string;..\..\libs\wintab;D:\projects\openframeworks_007\libs\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/ghost.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>.\Debug/$(ProjectName)_debug.lib</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
+      <MinimalRebuild>true</MinimalRebuild>
+      <AdditionalOptions>/D "_ITERATOR_DEBUG_LEVEL=2" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
-      <OutputFile>Debug\libghost.lib</OutputFile>
+      <OutputFile>Debug\libghost_debug.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <PostBuildEvent>
@@ -177,6 +182,7 @@ ECHO Done
     <ClInclude Include="..\..\intern\GHOST_WindowManager.h" />
     <ClInclude Include="..\..\intern\GHOST_WindowNULL.h" />
     <ClInclude Include="..\..\intern\GHOST_WindowWin32.h" />
+    <ClInclude Include="..\..\libs\string\STR_String.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\intern\GHOST_Buttons.cpp" />
@@ -201,6 +207,7 @@ ECHO Done
     <ClCompile Include="..\..\intern\GHOST_Window.cpp" />
     <ClCompile Include="..\..\intern\GHOST_WindowManager.cpp" />
     <ClCompile Include="..\..\intern\GHOST_WindowWin32.cpp" />
+    <ClCompile Include="..\..\libs\string\STR_String.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
