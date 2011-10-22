@@ -866,6 +866,8 @@ GHOST_TSuccess GHOST_WindowWin32::installDrawingContext(GHOST_TDrawingContextTyp
 				{
 
 					// Make sure we don't screw up the context
+					if (m_hGlRc == s_firsthGLRc)
+						s_firsthGLRc = NULL;
 					m_drawingContextType = GHOST_kDrawingContextTypeOpenGL;
 					removeDrawingContext();
 
@@ -1350,11 +1352,11 @@ static int EnumPixelFormats(HDC hdc) {
 
 GHOST_TSuccess GHOST_WindowWin32::setWindowBorder(bool hasBorder)
 {
-	
+	return GHOST_kSuccess;
 }
 
 GHOST_TSuccess GHOST_WindowWin32::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32 y)
 {
-	
+	return GHOST_kSuccess;
 }
 

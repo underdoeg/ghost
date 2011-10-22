@@ -22,3 +22,13 @@ build/mac/linux.tags
 build/mac/mac.workspace.session
 build/mac/testbed.mk
 build/mac/mac_wsp.mk
+
+*.o
+*.pbxuser
+*.mode1v3
+*.build
+*.a
+*.obj
+
+build/win_vs/Debug/
+build/win_vs/Release/

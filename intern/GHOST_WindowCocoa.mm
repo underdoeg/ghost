@@ -1084,6 +1084,34 @@ GHOST_TSuccess GHOST_WindowCocoa::invalidate()
 	return GHOST_kSuccess;
 }
 
+#include <iostream>
+
+GHOST_TSuccess GHOST_WindowCocoa::setIcon(GHOST_TUns8* pixels, int sizex, int sizey){
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc]
+								initWithBitmapDataPlanes:(unsigned char **)&pixels
+								pixelsWide:sizex pixelsHigh:sizey
+								bitsPerSample:8
+								samplesPerPixel:4  // or 4 with alpha
+								hasAlpha:YES
+								isPlanar:NO
+								colorSpaceName:NSDeviceRGBColorSpace
+								bitmapFormat:0
+								bytesPerRow:0  // 0 == determine automatically
+								bitsPerPixel:0];  // 0 == determine automatically
+	
+	NSImage *dockIcon = [[NSImage alloc] initWithSize:NSMakeSize(sizex, sizey)];
+	
+	[dockIcon addRepresentation:bitmap];
+		
+	[NSApp setApplicationIconImage:dockIcon];
+	[dockIcon release];
+	
+	[pool drain];
+	return GHOST_kSuccess;
+};
+
 #pragma mark Progress bar
 
 GHOST_TSuccess GHOST_WindowCocoa::setProgressBar(float progress)
@@ -1369,7 +1397,7 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowCustomCursorShape(GHOST_TUns8 *bitmap
 	//foreground and background color parameter is not handled for now (10.6)
 	m_customCursor = [[NSCursor alloc] initWithImage:cursorImage
 											 hotSpot:hotSpotPoint];
-	
+		
 	[cursorImageRep release];
 	[cursorImage release];
 	
@@ -1388,10 +1416,37 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowCustomCursorShape(GHOST_TUns8 bitmap[
 
 GHOST_TSuccess GHOST_WindowCocoa::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32 y)
 {
-	return GHOST_kFailure;
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	GHOST_Rect bounds;
+	getWindowBounds(bounds); 
+	
+	NSRect frame = [m_window.screen visibleFrame];
+	NSRect contentRect = [NSWindow contentRectForFrameRect:frame
+												 styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask)];
+	
+	GHOST_TInt32 bottom = (contentRect.size.height - 1) - bounds.getHeight() - y;
+	
+	
+	// Create a rect to send to the window
+	NSRect newFrame = NSMakeRect(x, bottom, bounds.getWidth(), bounds.getHeight());
+	
+	// Send message to the window to resize/relocate
+	[m_window setFrame:newFrame display:YES animate:NO];
+	[pool drain];
+	return GHOST_kSuccess;
 }
 
 GHOST_TSuccess GHOST_WindowCocoa::setWindowBorder(bool hasBorder)
 {
-	return GHOST_kFailure;
+	if(!hasBorder){
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		[m_window setStyleMask:NSBorderlessWindowMask];
+		m_systemCocoa->handleWindowEvent(GHOST_kEventWindowSize, this);
+		[pool drain];
+		return GHOST_kSuccess;
+	}else{
+		return setState(GHOST_kWindowStateNormal);
+	}
+	
 }
