@@ -243,6 +243,21 @@ public:
 	int oldX;
 	int oldY;
 
+	//Atoms for Xdnd
+	Atom XdndEnter;
+	Atom XdndPosition;
+	Atom XdndStatus;
+	Atom XdndTypeList;
+	Atom XdndActionCopy;
+	Atom XdndDrop;
+	Atom XdndLeave;
+	Atom XdndFinished;
+	Atom XdndSelection;
+	Atom XdndProxy;
+	Atom to_be_requested;
+	Atom sel;
+	GHOST_TDragnDropTypes dndType;
+
 protected:
 	/**
 	 * Tries to install a rendering context in this window.

@@ -44,6 +44,9 @@
 #include "GHOST_NDOFManagerX11.h"
 #endif
 #include "GHOST_Debug.h"
+
+#include "GHOST_EventDragnDrop.h"
+
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include <X11/XKBlib.h> /* allow detectable autorepeate */
@@ -61,6 +64,10 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <iterator>
 #include <vector>
 #include <stdio.h> // for fprintf only
 #include <cstdlib> // for exit
@@ -69,7 +76,141 @@ convertXKey(KeySym key);
 //these are for copy and select copy
 static char *txt_cut_buffer= NULL;
 static char *txt_select_buffer= NULL;
-//Atoms for Xdnd
+
+///UTILITIES FOR DRAG N DROP
+//Convert an atom name in to a std::string
+string GetAtomName(Display* disp, Atom a)
+{
+	if(a == None)
+		return "None";
+	else
+		return XGetAtomName(disp, a);
+}
+
+struct Property
+{
+	unsigned char *data;
+	int format, nitems;
+	Atom type;
+};
+
+
+//This atom isn't provided by default
+Atom XA_TARGETS;
+
+
+//This fetches all the data from a property
+Property read_property(Display* disp, Window w, Atom property)
+{
+	Atom actual_type;
+	int actual_format;
+	unsigned long nitems;
+	unsigned long bytes_after;
+	unsigned char *ret=0;
+
+	int read_bytes = 1024;
+
+	//Keep trying to read the property until there are no
+	//bytes unread.
+	do
+	{
+		if(ret != 0)
+			XFree(ret);
+		XGetWindowProperty(disp, w, property, 0, read_bytes, False, AnyPropertyType,
+							&actual_type, &actual_format, &nitems, &bytes_after,
+							&ret);
+
+		read_bytes *= 2;
+	}while(bytes_after != 0);
+
+	/*cerr << endl;
+	cerr << "Actual type: " << GetAtomName(disp, actual_type) << endl;
+	cerr << "Actual format: " << actual_format << endl;
+	cerr << "Number of items: " << nitems <<  endl;*/
+
+	Property p = {ret, actual_format, nitems, actual_type};
+
+	return p;
+}
+
+
+// This function takes a list of targets which can be converted to (atom_list, nitems)
+// and a list of acceptable targets with prioritees (datatypes). It returns the highest
+// entry in datatypes which is also in atom_list: ie it finds the best match.
+Atom pick_target_from_list(Display* disp, Atom* atom_list, int nitems, map<string, int> datatypes)
+{
+	Atom to_be_requested = None;
+	//This is higger than the maximum priority.
+	int priority=INT_MAX;
+
+	for(int i=0; i < nitems; i++)
+	{
+		string atom_name = GetAtomName(disp, atom_list[i]);
+		//LIST AVAILABLE DROP TARGET TYPES
+		//cerr << "Type " << i << " = " << atom_name << endl;
+
+		//See if this data type is allowed and of higher priority (closer to zero)
+		//than the present one.
+		if(datatypes.find(atom_name)!= datatypes.end())
+			if(priority > datatypes[atom_name])
+			{
+				//cerr << "Will request type: " << atom_name << endl;
+				priority = datatypes[atom_name];
+				to_be_requested = atom_list[i];
+			}
+	}
+
+	return to_be_requested;
+}
+
+// Finds the best target given up to three atoms provided (any can be None).
+// Useful for part of the Xdnd protocol.
+Atom pick_target_from_atoms(Display* disp, Atom t1, Atom t2, Atom t3, map<string, int> datatypes)
+{
+	Atom atoms[3];
+	int  n=0;
+
+	if(t1 != None)
+		atoms[n++] = t1;
+
+	if(t2 != None)
+		atoms[n++] = t2;
+
+	if(t3 != None)
+		atoms[n++] = t3;
+
+	return pick_target_from_list(disp, atoms, n, datatypes);
+}
+
+
+// Finds the best target given a local copy of a property.
+Atom pick_target_from_targets(Display* disp, Property p, map<string, int> datatypes)
+{
+	//The list of targets is a list of atoms, so it should have type XA_ATOM
+	//but it may have the type TARGETS instead.
+
+	if((p.type != XA_ATOM && p.type != XA_TARGETS) || p.format != 32)
+	{
+		//This would be really broken. Targets have to be an atom list
+		//and applications should support this. Nevertheless, some
+		//seem broken (MATLAB 7, for instance), so ask for STRING
+		//next instead as the lowest common denominator
+
+		if(datatypes.count("STRING"))
+			return XA_STRING;
+		else
+			return None;
+	}
+	else
+	{
+		Atom *atom_list = (Atom*)p.data;
+
+		return pick_target_from_list(disp, atom_list, p.nitems, datatypes);
+	}
+}
+///END UTILITIES FOR DRAG N DROP
+
+
 using namespace std;
 GHOST_SystemX11::
 GHOST_SystemX11(
@@ -363,6 +504,7 @@ processEvents(
 }
 void
 GHOST_SystemX11::processEvent(XEvent *xe) {
+
 	GHOST_WindowX11 * window = findGhostWindow(xe->xany.window);
 	GHOST_Event * g_event = NULL;
 	if (!window) {
@@ -571,10 +713,276 @@ GHOST_SystemX11::processEvent(XEvent *xe) {
 					}
 				}
 			} else {
+				/*
+				 GHOST_kEventDraggingEntered,
+				GHOST_kEventDraggingUpdated,
+				GHOST_kEventDraggingExited,
+				GHOST_kEventDraggingDropDone
+				http://git.racket-lang.org/plt/blob_plain/8ecd7a93c9b327555616f0e78e544f1b098b11cf:/src/wxxt/src/Windows/xdnd.h
+				*/
+				if(window->canAcceptDragOperation()){ //WINDOW ACCEPTS DRAG AND DROP, so let's look for it!
+					int xdnd_version=0;
+					map<string, int> datatypes;
+					datatypes["text/uri-list"] = 1;
+					datatypes["STRING"] = 1;
+
+					Window xdnd_source_window=None;
+
+					if(xe->xclient.message_type == window->XdndEnter){
+
+						bool more_than_3 = xe->xclient.data.l[1] & 1;
+						Window source = xe->xclient.data.l[0];
+
+						/*cerr << hex << "Source window = 0x" << source << dec << endl;
+						cerr << "Supports > 3 types = " << (more_than_3) << endl;
+						cerr << "Protocol version = " << ( xe->xclient.data.l[1] >> 24) << endl;
+						cerr << "Type 1 = " << GetAtomName(m_display, xe->xclient.data.l[2]) << endl;
+						cerr << "Type 2 = " << GetAtomName(m_display, xe->xclient.data.l[3]) << endl;
+						cerr << "Type 3 = " << GetAtomName(m_display, xe->xclient.data.l[4]) << endl;
+						*/
+
+						xdnd_version = ( xe->xclient.data.l[1] >> 24);
+
+						//Query which conversions are available and pick the best
+
+						if(more_than_3)
+						{
+							//Fetch the list of possible conversions
+							//Notice the similarity to TARGETS with paste.
+							Property p = read_property(m_display, source , window->XdndTypeList);
+							window->to_be_requested = pick_target_from_targets(m_display, p, datatypes);
+							XFree(p.data);
+						}
+						else
+						{
+							//Use the available list
+							window->to_be_requested = pick_target_from_atoms(m_display, xe->xclient.data.l[2], xe->xclient.data.l[3], xe->xclient.data.l[4], datatypes);
+						}
+
+						//cout << endl << "ATOM NAME " << GetAtomName(m_display, window->to_be_requested) << endl;
+
+						string atomName = GetAtomName(m_display, window->to_be_requested);
+						if(atomName == "text/uri-list")
+							window->dndType = GHOST_kDragnDropTypeFilenames;
+						else if(atomName == "STRING")
+							window->dndType = GHOST_kDragnDropTypeString;
+
+						int x, y;
+						x = xe->xclient.data.l[2]  >> 16;
+						y = xe->xclient.data.l[2] &0xffff;
+						g_event = new
+						GHOST_EventDragnDrop(
+							getMilliSeconds(),
+							GHOST_kEventDraggingEntered,
+							window->dndType,
+							window,
+							x, y, NULL
+						);
+
+						//pushDragDropEvent()
+					}else if(xe->xclient.message_type == window->XdndPosition){
+
+						//Xdnd: reply with an XDND status message
+						XClientMessageEvent m;
+						memset(&m, sizeof(m), 0);
+						m.type = ClientMessage;
+						m.display = m_display;
+						m.window = xe->xclient.data.l[0];
+						m.message_type = window->XdndStatus;
+						m.format=32;
+						m.data.l[0] = window->getXWindow();
+						m.data.l[1] = (window->to_be_requested != None);
+						m.data.l[2] = 0; //Specify an empty rectangle
+						m.data.l[3] = 0;
+						m.data.l[4] = window->XdndActionCopy; //We only accept copying anyway.
+
+						XSendEvent(m_display, xe->xclient.data.l[0], False, NoEventMask, (XEvent*)&m);
+						XFlush(m_display);
+
+						int x, y;
+						x = xe->xclient.data.l[2]  >> 16;
+						y = xe->xclient.data.l[2] &0xffff;
+						g_event = new
+						GHOST_EventDragnDrop(
+							getMilliSeconds(),
+							GHOST_kEventDraggingUpdated,
+							window->dndType,
+							window,
+							x, y, NULL
+						);
+					}else if(xe->xclient.message_type == window->XdndLeave){
+						int x, y;
+						x = xe->xclient.data.l[2]  >> 16;
+						y = xe->xclient.data.l[2] &0xffff;
+						g_event = new
+						GHOST_EventDragnDrop(
+							getMilliSeconds(),
+							GHOST_kEventDraggingExited,
+							window->dndType,
+							window,
+							x, y, NULL
+						);
+					}else if(xe->xclient.message_type == window->XdndDrop){
+						if(window->to_be_requested == None)
+						{
+							//It's sending anyway, despite instructions to the contrary.
+							//So reply that we're not interested.
+							XClientMessageEvent m;
+							memset(&m, sizeof(m), 0);
+							m.type = ClientMessage;
+							m.display = xe->xclient.display;
+							m.window = xe->xclient.data.l[0];
+							m.message_type = window->XdndFinished;
+							m.format=32;
+							m.data.l[0] = window->getXWindow();
+							m.data.l[1] = 0;
+							m.data.l[2] = None; //Failed.
+							XSendEvent(m_display, xe->xclient.data.l[0], False, NoEventMask, (XEvent*)&m);
+						}
+						else
+						{
+							xdnd_source_window = xe->xclient.data.l[0];
+							if(xdnd_version >= 1)
+								XConvertSelection(m_display, window->XdndSelection, window->to_be_requested, window->sel, window->getXWindow(), xe->xclient.data.l[2]);
+							else
+								XConvertSelection(m_display, window->XdndSelection, window->to_be_requested, window->sel, window->getXWindow(), CurrentTime);
+
+
+							//send an ok, we accept the drop
+							XClientMessageEvent m;
+							memset(&m, sizeof(m), 0);
+							m.type = ClientMessage;
+							m.display = m_display;
+							m.window = xe->xclient.data.l[0];
+							m.message_type = window->XdndFinished;
+							m.format=32;
+							m.data.l[0] = window->getXWindow();
+							m.data.l[1] = 1;
+							m.data.l[2] = window->XdndActionCopy; //We only ever copy.
+
+							//Reply that all is well.
+							XSendEvent(m_display, xdnd_source_window, False, NoEventMask, (XEvent*)&m);
+
+							//Un-proxy the root window
+							//XDeleteProperty(m_display, root, XdndProxy);
+
+							XSync(m_display, False);
+
+							
+						 }
+					}
+				}
 				/* Unknown client message, ignore */
 			}
 		break;
 	}
+
+	//ALSO PART OF DRAG AND DROP
+	case SelectionNotify:
+	{
+			map<string, int> datatypes;
+			datatypes["text/uri-list"] = 1;
+			datatypes["STRING"] = 1;
+			Atom target = xe->xselection.target;
+
+			if(xe->xselection.property == None)
+			{
+				//If the selection can not be converted, quit with error 2.
+				//If TARGETS can not be converted (nothing owns the selection)
+				//then quit with code 3.
+			}
+			else
+			{
+				Property prop = read_property(m_display, window->getXWindow(), window->sel);
+
+				//If we're being given a list of targets (possible conversions)
+				if(target == XA_TARGETS)
+				{
+					window->to_be_requested = pick_target_from_targets(m_display, prop, datatypes);
+
+					if(window->to_be_requested == None)
+					{
+						cerr << "No matching datatypes.\n";
+					}
+					else //Request the data type we are able to select
+					{
+						XConvertSelection(m_display, window->sel, window->to_be_requested, window->sel, window->getXWindow(), CurrentTime);
+					}
+				}
+				else if(target == window->to_be_requested)
+				{
+					//Dump the binary data
+					/*cerr << "Data begins:" << endl;
+					cerr << "--------\n";
+					cout.write((char*)prop.data, prop.nitems * prop.format/8);
+					cout << flush;
+					cerr << endl << "--------" << endl << "Data ends\n";
+					*/
+
+					int x, y;
+					x = xe->xclient.data.l[2]  >> 16;
+					y = xe->xclient.data.l[2] &0xffff;
+
+					GHOST_TEventDataPtr data;
+					//CONVERT DATA TO FILE LIST
+					string str_data = (char*)prop.data;
+					GHOST_TUns8 * temp_buff;
+					if(window->dndType == GHOST_kDragnDropTypeFilenames){
+
+						istringstream iss(str_data);
+						vector<string> tokens;
+						copy(istream_iterator<string>(iss),
+							istream_iterator<string>(),
+							back_inserter<vector<string> >(tokens));
+
+						GHOST_TStringArray* filenames  = (GHOST_TStringArray*)malloc(sizeof(GHOST_TStringArray));
+						filenames->count = tokens.size();
+						filenames->strings = (GHOST_TUns8**) malloc(filenames->count*sizeof(GHOST_TUns8*));
+						for(int i = 0; i< tokens.size(); i++){
+							temp_buff = (GHOST_TUns8*) malloc(tokens[i].size());
+							strncpy((char*)temp_buff, tokens[i].c_str(), tokens[i].size());
+							//temp_buff[tokens[i].size()] = '\0';
+							filenames->strings[i] = temp_buff;
+						}
+						data = (GHOST_TEventDataPtr)filenames;
+					}else if(window->dndType == GHOST_kDragnDropTypeString){
+						temp_buff = (GHOST_TUns8*) malloc(str_data.size());
+						strncpy((char*)temp_buff, str_data.c_str(), str_data.size());
+						data = (GHOST_TEventDataPtr) temp_buff;
+					}
+
+					g_event = new
+					GHOST_EventDragnDrop(
+						getMilliSeconds(),
+						GHOST_kEventDraggingDropDone,
+						window->dndType,
+						window,
+						x, y, data
+					);
+
+					//Reply OK.
+					XClientMessageEvent m;
+					memset(&m, sizeof(m), 0);
+					m.type = ClientMessage;
+					m.display = m_display;
+					m.window = xe->xclient.data.l[0];
+					m.message_type = window->XdndFinished;
+					m.format=32;
+					m.data.l[0] = window->getXWindow();
+					m.data.l[1] = 1;
+					m.data.l[2] = window->XdndActionCopy; //We only ever copy.
+
+					//Reply that all is well.
+					XSendEvent(m_display,  xe->xclient.data.l[0], False, NoEventMask, (XEvent*)&m);
+
+					XSync(m_display, False);
+				}
+
+				XFree(prop.data);
+			}
+	}
+	break;
+
 	case DestroyNotify:
 		::exit(-1);
 		// We're not interested in the following things.(yet...)
