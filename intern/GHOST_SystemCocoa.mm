@@ -743,7 +743,7 @@ GHOST_IWindow* GHOST_SystemCocoa::createWindow(
 	GHOST_IWindow* window = 0;
 	
 	//Get the available rect for including window contents
-	NSRect frame = [[NSScreen mainScreen] visibleFrame];
+	NSRect frame = [[NSScreen mainScreen] frame];
 	NSRect contentRect = [NSWindow contentRectForFrameRect:frame
 												 styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask)];
 	

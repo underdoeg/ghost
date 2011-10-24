@@ -579,6 +579,7 @@ void GHOST_WindowCocoa::getWindowBounds(GHOST_Rect& bounds) const
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+	/*
 	NSRect screenSize = [[m_window screen] visibleFrame];
 
 	rect = [m_window frame];
@@ -587,6 +588,14 @@ void GHOST_WindowCocoa::getWindowBounds(GHOST_Rect& bounds) const
 	bounds.m_l = rect.origin.x -screenSize.origin.x;
 	bounds.m_r = rect.origin.x-screenSize.origin.x + rect.size.width;
 	bounds.m_t = screenSize.size.height - (rect.origin.y + rect.size.height -screenSize.origin.y);
+	*/
+	
+	NSRect screenSize = [[m_window screen] frame];
+	NSRect winFrame = m_window.frame;
+	bounds.m_l = winFrame.origin.x;
+	bounds.m_t = screenSize.size.height - winFrame.origin.y - winFrame.size.height;
+	bounds.m_b = screenSize.size.height - winFrame.origin.y;
+	bounds.m_r = winFrame.origin.x + winFrame.size.width;
 	
 	[pool drain];
 }
@@ -1418,9 +1427,11 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+	
 	GHOST_Rect bounds;
 	getWindowBounds(bounds); 
 	
+	/*
 	NSRect frame = [m_window.screen visibleFrame];
 	NSRect contentRect = [NSWindow contentRectForFrameRect:frame
 												 styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask)];
@@ -1430,9 +1441,13 @@ GHOST_TSuccess GHOST_WindowCocoa::setWindowPosition(GHOST_TUns32 x, GHOST_TUns32
 	
 	// Create a rect to send to the window
 	NSRect newFrame = NSMakeRect(x, bottom, bounds.getWidth(), bounds.getHeight());
+	*/
+	
+	NSSize window_size = m_window.frame.size;
+	NSPoint p = NSMakePoint(x, [[m_window screen] frame].size.height - y);
 	
 	// Send message to the window to resize/relocate
-	[m_window setFrame:newFrame display:YES animate:NO];
+	[m_window setFrameTopLeftPoint:p];
 	[pool drain];
 	return GHOST_kSuccess;
 }
