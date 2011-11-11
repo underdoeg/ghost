@@ -45,15 +45,27 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
     <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PostBuildEventUseInBuild>
+<<<<<<< HEAD
+=======
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)_debug</TargetName>
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..;..\..;..\..\include;..\..\intern;..\..\libs\string;..\..\libs\wintab;D:\projects\openframeworks_007\libs\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+<<<<<<< HEAD
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+=======
+      <StringPooling>
+      </StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/ghost.pch</PrecompiledHeaderOutputFile>
@@ -88,21 +100,37 @@ ECHO Done
       <AdditionalIncludeDirectories>..;..\..;..\..\include;..\..\intern;..\..\libs\string;..\..\libs\wintab;D:\projects\openframeworks_007\libs\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+<<<<<<< HEAD
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+=======
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/ghost.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
       <ObjectFileName>.\Debug/</ObjectFileName>
+<<<<<<< HEAD
       <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+=======
+      <ProgramDataBaseFileName>.\Debug/$(ProjectName)_debug.lib</ProgramDataBaseFileName>
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
+<<<<<<< HEAD
     </ClCompile>
     <Lib>
       <OutputFile>Debug\libghost.lib</OutputFile>
+=======
+      <MinimalRebuild>true</MinimalRebuild>
+      <AdditionalOptions>/D "_ITERATOR_DEBUG_LEVEL=2" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Lib>
+      <OutputFile>Debug\libghost_debug.lib</OutputFile>
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <PostBuildEvent>
@@ -177,6 +205,10 @@ ECHO Done
     <ClInclude Include="..\..\intern\GHOST_WindowManager.h" />
     <ClInclude Include="..\..\intern\GHOST_WindowNULL.h" />
     <ClInclude Include="..\..\intern\GHOST_WindowWin32.h" />
+<<<<<<< HEAD
+=======
+    <ClInclude Include="..\..\libs\string\STR_String.h" />
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\intern\GHOST_Buttons.cpp" />
@@ -201,6 +233,10 @@ ECHO Done
     <ClCompile Include="..\..\intern\GHOST_Window.cpp" />
     <ClCompile Include="..\..\intern\GHOST_WindowManager.cpp" />
     <ClCompile Include="..\..\intern\GHOST_WindowWin32.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="..\..\libs\string\STR_String.cpp" />
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

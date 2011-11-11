@@ -150,6 +150,7 @@ static unsigned char BLENDER_ICON_48x48x24[] = {
 
 
 GLXContext GHOST_WindowX11::s_firstContext = NULL;
+std::map<Display*, GLXContext> GHOST_WindowX11::contexts;
 
 GHOST_WindowX11::
 GHOST_WindowX11(
@@ -406,11 +407,7 @@ GHOST_WindowX11(
 	setIcon(logoPixels, logoPixelsW, logoPixelsH);
 	// done setting the icon
 
-	//by default all windows accept d'n'drop
-	Atom XdndAware = XInternAtom(m_display, "XdndAware", False);
-	Atom version=5;
-	XChangeProperty(m_display, m_window, XdndAware, XA_ATOM, 32, PropModeReplace, (unsigned char*)&version, 1);
-
+	
 
 	setTitle(title);
 
@@ -426,6 +423,27 @@ GHOST_WindowX11(
 
 	XMapWindow(m_display, m_window);
 	GHOST_PRINT("Mapped window\n");
+
+	//BEGIN DRAG'N'DROP reference: http://www.edwardrosten.com/code/x11.html
+
+	//Atoms for Xdnd
+	XdndEnter = XInternAtom(m_display, "XdndEnter", False);
+	XdndPosition = XInternAtom(m_display, "XdndPosition", False);
+	XdndStatus = XInternAtom(m_display, "XdndStatus", False);
+	XdndTypeList = XInternAtom(m_display, "XdndTypeList", False);
+	XdndActionCopy = XInternAtom(m_display, "XdndActionCopy", False);
+	XdndDrop = XInternAtom(m_display, "XdndDrop", False);
+	XdndLeave = XInternAtom(m_display, "XdndLeave", False);
+	XdndFinished = XInternAtom(m_display, "XdndFinished", False);
+	XdndSelection = XInternAtom(m_display, "XdndSelection", False);
+	XdndProxy = XInternAtom(m_display, "XdndProxy", False);
+	sel = XInternAtom(m_display, "PRIMARY", 0);
+	to_be_requested = None;
+
+	//by default all windows accept drag'n'drop
+	Atom XdndAware = XInternAtom(m_display, "XdndAware", False);
+	Atom version=5;
+	XChangeProperty(m_display, m_window, XdndAware, XA_ATOM, 32, PropModeReplace, (unsigned char*)&version, 1);
 
 	XFlush(m_display);
 }
@@ -1303,12 +1321,14 @@ installDrawingContext(
 ){
 	// only support openGL for now.
 	GHOST_TSuccess success;
+	s_firstContext = contexts[m_display];
 	switch (type) {
 	case GHOST_kDrawingContextTypeOpenGL:
 		m_context = glXCreateContext(m_display, m_visual, s_firstContext, True);
 		if (m_context !=NULL) {
 			if (!s_firstContext) {
 				s_firstContext = m_context;
+				contexts[m_display] = m_context;
 			}
 			glXMakeCurrent(m_display, m_window,m_context);
 			success = GHOST_kSuccess;

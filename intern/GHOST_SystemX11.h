@@ -255,9 +255,16 @@ public:
 	Atom m_incr;
 	Atom m_utf8_string;
 
+	/**
+	 * set the current display
+	 **/
+	 void setDisplay(Display* d);
+
 private :
 
 	Display * m_display;
+
+	std::vector<Display*> displays;
 
 	/// The vector of windows that need to be updated.
 	std::vector<GHOST_WindowX11 *> m_dirty_windows;
@@ -295,6 +302,8 @@ private :
 		bool
 	generateWindowExposeEvents(
  	);
+
+
 };
 
 #endif

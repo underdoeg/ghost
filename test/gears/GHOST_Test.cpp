@@ -264,7 +264,7 @@ static void View(GHOST_IWindow* window, bool stereo, int eye = 0)
 	float eyeSeparation = 0.62f;
 	window->getClientBounds(bnds);
 
-	
+
 	noOfScanlines = bnds.getHeight();
 	lowerScanline = 0;
 
@@ -278,7 +278,7 @@ static void View(GHOST_IWindow* window, bool stereo, int eye = 0)
 	nearplane = 5.0;
 	farplane = 60.0;
 
-	
+
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -335,6 +335,9 @@ Application::Application(GHOST_ISystem* system)
 
 	// Install a timer to have the gears running
 	m_gearsTimer = system->installTimer(0 /*delay*/, 20/*interval*/, gearsTimerProc, m_mainWindow);
+
+	m_mainWindow->setAcceptDragOperation(true);
+	m_secondaryWindow->setAcceptDragOperation(true);
 }
 
 
@@ -407,7 +410,7 @@ bool Application::processEvent(GHOST_IEvent* event)
 			if (!m_system->getFullScreen()) {
 				// Begin fullscreen mode
 				GHOST_DisplaySetting setting;
-				
+
 				setting.bpp = 16;
 				setting.frequency = 50;
 				setting.xPixels = 640;
@@ -435,7 +438,7 @@ bool Application::processEvent(GHOST_IEvent* event)
 				if (down) {
 					std::cout << "right shift down\n";																												}
 				m_system->getModifierKeyState(GHOST_kModifierKeyLeftAlt,down);
-				if (down) { 
+				if (down) {
 					std::cout << "left Alt down\n";
 				}
 				m_system->getModifierKeyState(GHOST_kModifierKeyRightAlt,down);
@@ -553,13 +556,48 @@ bool Application::processEvent(GHOST_IEvent* event)
 		break;
 
 	case GHOST_kEventWindowMove:
-		cout << "WINDOW MOVED" << endl;
+		//cout << "WINDOW MOVED" << endl;
 		break;
 
 	case GHOST_kEventWindowSize:
-		cout << "WINDOW RESIZED" << endl;
+		//cout << "WINDOW RESIZED" << endl;
 		break;
 
+	case GHOST_kEventDraggingEntered:
+		{
+			GHOST_TEventDragnDropData* dragnDropData = (GHOST_TEventDragnDropData*)((GHOST_IEvent*)event)->getData();
+			//std::cout << "GHOST_kEventDraggingEntered, dragged object type : " << dragnDropData->dataType;
+			//std::cout << " mouse at x=" << dragnDropData->x << " y=" << dragnDropData->y;
+		}
+		break;
+	case GHOST_kEventDraggingExited:
+		{
+			GHOST_TEventDragnDropData* dragnDropData = (GHOST_TEventDragnDropData*)((GHOST_IEvent*)event)->getData();
+			//std::cout << "GHOST_kEventDraggingExited, dragged object type : " << dragnDropData->dataType;
+		}
+		break;
+	case GHOST_kEventDraggingDropDone:
+		{
+			GHOST_TEventDragnDropData* dragnDropData = (GHOST_TEventDragnDropData*)((GHOST_IEvent*)event)->getData();
+			switch (dragnDropData->dataType) {
+				case GHOST_kDragnDropTypeString:
+					std::cout << " type : GHOST_kDragnDropTypeString," << endl;
+					std::cout << "String received = " << (char*)dragnDropData->data;
+					break;
+				case GHOST_kDragnDropTypeFilenames:
+				{
+					GHOST_TStringArray *strArray = (GHOST_TStringArray*)dragnDropData->data;
+					int i;
+					std::cout << "\n  Received " << strArray->count << " filename" << (strArray->count > 1 ? "s:" : ":") << endl;
+					for (i=0;i<strArray->count;i++)
+						std::cout << "File[" << i << "] : " << strArray->strings[i] << endl;
+				}
+					break;
+				default:
+					break;
+			}
+		}
+		break;
 	default:
 		handled = false;
 		break;
@@ -581,7 +619,7 @@ int main(int /*argc*/, char** /*argv*/)
 
 		// Add the application as event consumer
 		fSystem->addEventConsumer(&app);
-                
+
 		// Enter main loop
 		while (!app.m_exitRequested) {
             //printf("main: loop\n");
