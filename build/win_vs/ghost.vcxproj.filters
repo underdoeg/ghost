@@ -164,6 +164,10 @@
     <ClInclude Include="..\..\GHOST_Path-api.h" />
     <ClInclude Include="..\..\GHOST_Rect.h" />
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    <ClInclude Include="..\..\libs\string\STR_String.h" />
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
 =======
     <ClInclude Include="..\..\libs\string\STR_String.h" />
 >>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
@@ -236,6 +240,10 @@
       <Filter>Header Files\src</Filter>
     </ClCompile>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    <ClCompile Include="..\..\libs\string\STR_String.cpp" />
+>>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
 =======
     <ClCompile Include="..\..\libs\string\STR_String.cpp" />
 >>>>>>> e17fb91e2db2e705b688f1d38c51bcd23d29e036
